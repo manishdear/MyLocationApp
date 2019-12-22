@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">MyLocationApp</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <string name="title_search">Search</string>
+    <string name="title_Charge">Charge</string>
+    <string name="title_Profile">Profile</string>
+    <string name="google_map_api_key">AIzaSyAbWTztcko9rW--ACROvJkb6Dlf2BgXLbU</string>
+</resources>
