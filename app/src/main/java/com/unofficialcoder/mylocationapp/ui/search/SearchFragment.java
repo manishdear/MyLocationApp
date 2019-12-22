@@ -59,7 +59,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
     private static final int LOCATIION_PERMISSION_REQUEST_CODE = 1234;
     public static final double DEFAULT_LAT = 23.3679703;
     public static final double DEFAULT_LNG = 79.0682004;
-    private static final float DEFAULT_ZOOM =4.98f;
+    private static final float DEFAULT_ZOOM =15f;
     private static final int M_MAX_ENTRIES = 5;
 
     //Widgets
@@ -88,6 +88,10 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
 
             }
         });
+
+        getLocationPermission();
+        setSugession();
+
         return root;
     }
 
@@ -98,8 +102,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         info = view.findViewById(R.id.place_info);
         gps = view.findViewById(R.id.ic_gps);
 
-        getLocationPermission();
-        setSugession();
     }
 
     private void getLocationPermission(){
@@ -107,9 +109,9 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         String[] permission = {Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION};
 
-        if (ContextCompat.checkSelfPermission(getContext(),
+        if (ContextCompat.checkSelfPermission(getActivity(),
                 FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            if(ContextCompat.checkSelfPermission(getContext(),
+            if(ContextCompat.checkSelfPermission(getActivity(),
                     COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
                 mLocationPermissionGranted = true;
 
@@ -122,7 +124,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         }else{
             ActivityCompat.requestPermissions(getActivity(), permission, LOCATIION_PERMISSION_REQUEST_CODE);
         }
-
     }
 
     @Override
@@ -154,21 +155,19 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
     private void initMap(){
         Log.d(TAG, "initMap: Initilizing Map");
         SupportMapFragment supportMapFragment = (SupportMapFragment)getChildFragmentManager().findFragmentById(R.id.map_container);
-        supportMapFragment.getMapAsync(this);
-
+        supportMapFragment.getMapAsync(SearchFragment.this);
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(GoogleMap mgoogleMap) {
         Log.d(TAG, "onMapReady: Map is Ready");
-        this.googleMap = googleMap;
+        this.googleMap = mgoogleMap;
 
         if(mLocationPermissionGranted){
             getDeviceLocation();
         }else{
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(DEFAULT_LAT, DEFAULT_LNG), DEFAULT_ZOOM));
+            this.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(DEFAULT_LAT, DEFAULT_LNG), DEFAULT_ZOOM));
         }
-        this.googleMap.setMyLocationEnabled(true);
 
         init();
     }
